@@ -62,7 +62,6 @@ html,body{
 
 .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--cyan),var(--vio)); color:#001217; padding:10px 16px; border-radius:12px; font-weight:800; display:none; z-index:9999; box-shadow:var(--glow)}
 
-/* View counter góc phải */
 .view-counter{
   position:fixed; bottom:22px; right:22px; z-index:1000;
   display:flex; align-items:center; gap:9px;
@@ -152,7 +151,7 @@ html,body{
       <div class="grid">
         <a class="tile" href="https://www.tiktok.com/@shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> <strong>TikTok</strong></a>
         <a class="tile" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> <strong>Facebook</strong></a>
-        <a class="tile" href="https://www.instagram.com/_tduong.3101/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
+        <a class="tile" href="https://www.instagram.com/shintr3126/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
         <a class="tile" href="https://locket.cam/shin3101" target="_blank" rel="noopener"><i class="fa-solid fa-camera"></i> <strong>Locket</strong></a>
         <a class="tile" href="#" id="copyMail"><i class="fa-solid fa-envelope"></i> <strong>Copy Email</strong></a>
         <a class="tile" href="#" id="copyPhone"><i class="fa-solid fa-phone"></i> <strong>Copy Phone</strong></a>
@@ -172,30 +171,31 @@ html,body{
 <audio id="bgAudio" loop preload="auto" style="display:none"></audio>
 
 <script>
-// ========== 1. VIEW COUNTER TOÀN CẦU (KHÔNG LOCALSTORAGE) ==========
+// ========== 1. VIEW COUNTER TOÀN CẦU DÙNG HITS.SH (ỔN ĐỊNH, KHÔNG LỖI ?) ==========
 async function updateViewCounter() {
   const vcSpan = document.getElementById('vcNum');
   if (!vcSpan) return;
-  vcSpan.innerText = '0';  // hiển thị 0 ngay lập tức, không để ... lâu
+  vcSpan.innerText = '0';
   try {
-    const res = await fetch('https://api.countapi.xyz/hit/tranduongdev_profile_2026/views', {
+    const res = await fetch('https://hits.sh/tranduongdev-profile.json?nocache=' + Date.now(), {
       cache: 'no-store',
       headers: { 'Accept': 'application/json' }
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error();
     const data = await res.json();
-    if (data && typeof data.value === 'number') {
-      vcSpan.innerText = data.value.toLocaleString('vi-VN');
-    } else throw new Error('Invalid response');
+    const total = data?.total;
+    if (typeof total === 'number') {
+      vcSpan.innerText = total.toLocaleString('vi-VN');
+    } else throw new Error();
   } catch (err) {
-    console.error('Lỗi đếm lượt xem toàn cầu:', err);
-    vcSpan.innerText = '?';
-    document.querySelector('.view-counter').title = 'Không thể đếm lượt, hãy thử lại sau';
+    console.warn('Lỗi hits.sh:', err);
+    vcSpan.innerText = '—';
+    document.querySelector('.view-counter').title = 'Tạm thời không đếm được lượt';
   }
 }
 updateViewCounter();
 
-// ========== 2. LẤY NHẠC VÀ AVATAR TỪ ARCHIVE.ORG (BẤT ĐỒNG BỘ, KHÔNG ẢNH HƯỞNG TỐC ĐỘ HIỂN THỊ) ==========
+// ========== 2. LẤY NHẠC VÀ AVATAR TỪ ARCHIVE.ORG ==========
 const MUSIC_ID = 'vstra-ai-ngoai-anh-official-audio-320-kbps';
 const AVATAR_ID = 'a476780b6ec4049e87c2d808650f7aea';
 
@@ -220,29 +220,24 @@ async function fetchArchiveFile(identifier, fileType = 'audio') {
 }
 
 (async function loadMedia() {
-  // Nhạc
   const audioEl = document.getElementById('bgAudio');
   const musicBtn = document.getElementById('toggleMusicBtn');
   const musicLink = await fetchArchiveFile(MUSIC_ID, 'audio');
   if (musicLink) {
     audioEl.src = musicLink;
     audioEl.load();
-    // Cho phép nút hoạt động
     musicBtn.disabled = false;
   } else {
     musicBtn.disabled = true;
     musicBtn.textContent = '❌ Nhạc lỗi';
   }
 
-  // Avatar
   const avatarImg = document.getElementById('avatarImg');
   const imgLink = await fetchArchiveFile(AVATAR_ID, 'image');
-  if (imgLink) {
-    avatarImg.src = imgLink;
-  }
+  if (imgLink) avatarImg.src = imgLink;
 })();
 
-// ========== 3. ĐIỀU KHIỂN NHẠC BẬT/TẮT ==========
+// ========== 3. ĐIỀU KHIỂN NHẠC ==========
 const audio = document.getElementById('bgAudio');
 const musicBtn = document.getElementById('toggleMusicBtn');
 let isPlaying = false;
@@ -262,7 +257,6 @@ musicBtn.addEventListener('click', async () => {
       musicBtn.textContent = '🔊 Tắt nhạc';
       isPlaying = true;
     } catch (err) {
-      console.error(err);
       showToast('⚠️ Không thể phát nhạc, hãy thử lại');
     }
   }
@@ -333,7 +327,7 @@ function spawnHeart(x, y) {
   requestAnimationFrame(animate);
 }
 
-// ========== 6. BACKGROUND GALAXY (SAO + SAO BĂNG) ==========
+// ========== 6. BACKGROUND GALAXY ==========
 const canvas = document.getElementById('galaxyCanvas');
 const ctx = canvas.getContext('2d');
 let width, height;
@@ -364,25 +358,19 @@ function initStars(count) {
 function drawGalaxy() {
   if (!ctx) return;
   ctx.clearRect(0, 0, width, height);
-  
   const grad = ctx.createRadialGradient(width * 0.7, height * 0.3, 0, width * 0.7, height * 0.3, Math.max(width, height) * 0.8);
   grad.addColorStop(0, 'rgba(0, 255, 255, 0.08)');
   grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, width, height);
-  
   ctx.fillStyle = '#ffffff';
   for (let s of stars) {
     s.y += s.v;
-    if (s.y > height) {
-      s.y = 0;
-      s.x = Math.random() * width;
-    }
+    if (s.y > height) { s.y = 0; s.x = Math.random() * width; }
     ctx.beginPath();
     ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
     ctx.fill();
   }
-  
   ctx.strokeStyle = '#00ffff';
   ctx.lineWidth = 1.8;
   for (let i = meteors.length - 1; i >= 0; i--) {
@@ -395,7 +383,6 @@ function drawGalaxy() {
     m.y += m.vy;
     if (m.y > height || m.x < 0 || m.x > width) meteors.splice(i, 1);
   }
-  
   if (Math.random() < 0.02) {
     meteors.push({
       x: Math.random() * width,
@@ -405,10 +392,8 @@ function drawGalaxy() {
       vy: Math.random() * 5 + 3
     });
   }
-  
   requestAnimationFrame(drawGalaxy);
 }
-
 resizeCanvas();
 initStars(300);
 drawGalaxy();
