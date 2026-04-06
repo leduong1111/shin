@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Trần Dương Dev</title>
+<title>Trần Dương Dev — LinkBio Neon Galaxy</title>
 <meta name="theme-color" content="#000000" />
-<meta name="description" content="LinkBio neon galaxy — DarkStack Team" />
+<meta name="description" content="LinkBio neon galaxy — DarkStack Team | Trần Dương Developer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E" />
 <style> 
@@ -14,6 +14,7 @@
   --glow:0 0 25px rgba(0,255,255,.45),0 0 60px rgba(138,43,226,.25);
   --card-bg:rgba(2,8,20,.48);
 }
+*{ margin:0; padding:0; box-sizing:border-box; }
 html,body{
   height:100%; margin:0; background:var(--bg); color:var(--fg);
   font-family:system-ui,Segoe UI,Inter,Roboto,Arial,sans-serif;
@@ -59,11 +60,10 @@ html,body{
 .tile:hover{background:radial-gradient(circle at center, rgba(0,255,255,.25), rgba(138,43,226,.2)); box-shadow:var(--glow); transform:scale(1.05)}
 .footer{text-align:center; margin-top:18px; color:#bfefff}
 
-.toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--cyan),var(--vio)); color:#001217; padding:10px 16px; border-radius:12px; font-weight:800; display:none; z-index:5; box-shadow:var(--glow)}
+.toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--cyan),var(--vio)); color:#001217; padding:10px 16px; border-radius:12px; font-weight:800; display:none; z-index:9999; box-shadow:var(--glow)}
 
-/* ── View counter góc dưới phải ── */
 .view-counter{
-  position:fixed; bottom:22px; right:22px; z-index:10;
+  position:fixed; bottom:22px; right:22px; z-index:1000;
   display:flex; align-items:center; gap:9px;
   padding:9px 16px; border-radius:14px;
   background:rgba(2,8,20,.78); backdrop-filter:blur(14px);
@@ -71,6 +71,7 @@ html,body{
   box-shadow:0 0 18px rgba(0,255,255,.18), 0 0 40px rgba(138,43,226,.14);
   font-size:.82rem; color:#bfefff;
   transition:.3s; cursor:default; user-select:none;
+  font-family:system-ui, monospace;
 }
 .view-counter:hover{
   box-shadow:0 0 32px rgba(0,255,255,.45), 0 0 70px rgba(138,43,226,.3);
@@ -88,26 +89,28 @@ html,body{
   text-shadow:0 0 10px var(--cyan);
   font-size:.95rem; min-width:38px; text-align:right;
 }
+@media (max-width:600px){
+  .view-counter{bottom:14px; right:14px; padding:6px 12px; gap:6px;}
+  .vc-num{font-size:.85rem; min-width:32px;}
+  .vc-label{font-size:.7rem;}
+}
 
-#galaxy{position:fixed; top:0; left:0; width:100%; height:100%; z-index:0}
-
-:focus-visible{outline:2px dashed var(--cyan); outline-offset:4px}
-@media (prefers-reduced-motion:reduce){
-  .panel:hover,.avatar:hover{transform:none}
-  .avatar::after{animation:none}
-  .vc-dot{animation:none}
+#galaxyCanvas{
+  position:fixed; top:0; left:0; width:100%; height:100%; 
+  z-index:0; display:block;
+  background: radial-gradient(circle at 30% 20%, #03041f, #000000);
 }
 </style>
 </head>
 <body>
-<canvas id="galaxy" aria-hidden="true"></canvas>
+<canvas id="galaxyCanvas" aria-hidden="true"></canvas>
+
 <div class="wrap">
   <div class="shell">
-    <!-- Hồ sơ -->
     <section class="panel" aria-label="Hồ sơ">
       <div class="head">
         <div class="avatar" id="avatar" title="Nhấn để thả tim">
-          <img src="" />
+          <img id="avatarImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2300ffff'/%3E%3Ctext x='50' y='70' font-size='45' text-anchor='middle' fill='%23000'%3E🚀%3C/text%3E%3C/svg%3E" alt="avatar" />
           <span class="online" aria-hidden="true"></span>
         </div>
         <div class="title">
@@ -130,107 +133,287 @@ html,body{
       </div>
       <p class="bio">Developer 💻 | Tool 💕</p>
       <div class="actions">
-        <a class="btn" id="cta" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener">LIÊN HỆ</a>
-        <button class="btn" id="toggleMusicBtn" aria-pressed="true">🔊 Tắt nhạc</button>
+        <a class="btn" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener">LIÊN HỆ</a>
+        <button class="btn" id="toggleMusicBtn">🔈 Bật nhạc</button>
       </div>
     </section>
 
-    <!-- Liên kết & mạng xã hội -->
     <section class="panel" aria-label="Liên kết & mạng xã hội">
       <div class="section">Thông Tin</div>
       <div class="grid">
         <a class="tile" href="https://github.com/leduong1111" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> <strong>GitHub</strong></a>
         <a class="tile" href="https://discordapp.com/users/982388112342810714" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> <strong>Discord</strong></a>
-        <a class="tile" href="https://www.youtube.com/@aimpcmz3669" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i> <strong>YouTube</strong></a>
+        <a class="tile" href="https://zalo.me/0343063275" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> <strong>Zalo</strong></a>
       </div>
       <div class="section">Mạng Xã Hội</div>
       <div class="grid">
-        <a class="tile" href="https://www.tiktok.com/@shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> <strong>Tik Tok</strong></a>
+        <a class="tile" href="https://www.tiktok.com/@shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> <strong>TikTok</strong></a>
         <a class="tile" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> <strong>Facebook</strong></a>
-        <a class="tile" href="https://www.instagram.com/shintr3126/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
-        <a class="tile" href="https://zalo.me/0343063275" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> <strong>Zalo</strong></a>
+        <a class="tile" href="https://www.instagram.com/_tduong.3101" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
+        <a class="tile" href="https://locket.cam/shin3101" target="_blank" rel="noopener"><i class="fa-solid fa-camera"></i> <strong>Locket</strong></a>
         <a class="tile" href="#" id="copyMail"><i class="fa-solid fa-envelope"></i> <strong>Copy Email</strong></a>
         <a class="tile" href="#" id="copyPhone"><i class="fa-solid fa-phone"></i> <strong>Copy Phone</strong></a>
       </div>
-      <div class="footer">© 2025 • Trần Dương Dev </div>
+      <div class="footer">© 2025 • Trần Dương Dev</div>
     </section>
   </div>
 </div>
 
 <div class="toast" id="toast">Đã copy!</div>
-
-<!-- View counter cố định góc dưới phải -->
 <div class="view-counter" title="Tổng lượt xem profile">
   <span class="vc-dot"></span>
   <span class="vc-label">👁 Lượt xem</span>
-  <img
-    src="https://hits.sh/leduong1111.github.io/shin.svg?style=flat&label=&color=00ffff&labelColor=020814"
-    alt="view count"
-    style="height:22px;vertical-align:middle;filter:brightness(1.15) drop-shadow(0 0 6px #00ffff);"
-    id="vcBadge"
-  />
+  <span class="vc-num" id="vcNum">0</span>
 </div>
 
-<audio id="backgroundAudio" loop preload="auto" style="display:none">
-  <source src="https://pomf2.lain.la/f/ywjvvkdu.mp3" type="audio/mpeg" />
-</audio>
+<audio id="bgAudio" loop preload="auto" style="display:none"></audio>
 
 <script>
-// ── Music toggle ──
-const audio=document.getElementById('backgroundAudio');
-const btn=document.getElementById('toggleMusicBtn');
-audio.pause();
-btn.textContent='🔈 Bật nhạc';
-btn.setAttribute('aria-pressed','false');
-btn.addEventListener('click',async()=>{
-  if(audio.paused){
-    try{
-      await audio.play();
-      btn.textContent='🔊 Tắt nhạc';
-      btn.setAttribute('aria-pressed','true');
-    }catch(e){ btn.textContent='❌ Lỗi audio'; }
+// ========== 1. TỐI ƯU LƯỢT XEM: HIỂN THỊ NGAY, CẬP NHẬT SAU ==========
+const vcSpan = document.getElementById('vcNum');
+// Hiển thị số từ localStorage ngay lập tức (nếu có) để không bị trống
+let cachedViews = localStorage.getItem('td_views_cached');
+if (cachedViews && !isNaN(parseInt(cachedViews))) {
+  vcSpan.innerText = parseInt(cachedViews).toLocaleString('vi-VN');
+} else {
+  vcSpan.innerText = '...';
+}
+
+// Gọi API countapi để tăng và lấy số mới (bất đồng bộ, không làm chậm giao diện)
+(async function updateGlobalView() {
+  try {
+    const res = await fetch('https://api.countapi.xyz/hit/tranduongdev_profile_2026/views', {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (data && typeof data.value === 'number') {
+      const newCount = data.value;
+      vcSpan.innerText = newCount.toLocaleString('vi-VN');
+      localStorage.setItem('td_views_cached', newCount);
+    } else throw new Error();
+  } catch (err) {
+    // Fallback: tăng local count nhưng vẫn hiển thị
+    let local = localStorage.getItem('td_views_local');
+    let count = local ? parseInt(local, 10) : 0;
+    count++;
+    localStorage.setItem('td_views_local', count);
+    vcSpan.innerText = count.toLocaleString('vi-VN');
+    localStorage.setItem('td_views_cached', count);
+    document.querySelector('.view-counter').title = 'Lượt xem (local)';
+  }
+})();
+
+// ========== 2. LẤY NHẠC & AVATAR TỪ ARCHIVE (KHÔNG LÀM CHẬM TRANG) ==========
+const MUSIC_ID = 'vstra-ai-ngoai-anh-official-audio-320-kbps';
+const AVATAR_ID = 'a476780b6ec4049e87c2d808650f7aea';
+
+async function fetchArchiveFile(identifier, fileType = 'audio') {
+  try {
+    const res = await fetch(`https://archive.org/metadata/${identifier}`);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const files = data.files || [];
+    if (fileType === 'audio') {
+      const mp3File = files.find(f => f.name.toLowerCase().endsWith('.mp3') || f.name.toLowerCase().endsWith('.m4a'));
+      if (mp3File) return `https://archive.org/download/${identifier}/${mp3File.name}`;
+    } else if (fileType === 'image') {
+      const imgFile = files.find(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name));
+      if (imgFile) return `https://archive.org/download/${identifier}/${imgFile.name}`;
+    }
+    return null;
+  } catch (e) {
+    console.warn(`Lỗi lấy file từ ${identifier}:`, e);
+    return null;
+  }
+}
+
+(async function loadMedia() {
+  const audioEl = document.getElementById('bgAudio');
+  const musicBtn = document.getElementById('toggleMusicBtn');
+  const musicLink = await fetchArchiveFile(MUSIC_ID, 'audio');
+  if (musicLink) {
+    audioEl.src = musicLink;
+    audioEl.load();
   } else {
+    musicBtn.disabled = true;
+    musicBtn.textContent = '❌ Nhạc lỗi';
+  }
+
+  const avatarImg = document.getElementById('avatarImg');
+  const imgLink = await fetchArchiveFile(AVATAR_ID, 'image');
+  if (imgLink) avatarImg.src = imgLink;
+})();
+
+// ========== 3. ĐIỀU KHIỂN NHẠC ==========
+const audio = document.getElementById('bgAudio');
+const musicBtn = document.getElementById('toggleMusicBtn');
+let isPlaying = false;
+
+musicBtn.addEventListener('click', async () => {
+  if (!audio.src) {
+    showToast('⚠️ Nhạc chưa sẵn sàng, thử lại sau');
+    return;
+  }
+  if (isPlaying) {
     audio.pause();
-    btn.textContent='🔈 Bật nhạc';
-    btn.setAttribute('aria-pressed','false');
+    musicBtn.textContent = '🔈 Bật nhạc';
+    isPlaying = false;
+  } else {
+    try {
+      await audio.play();
+      musicBtn.textContent = '🔊 Tắt nhạc';
+      isPlaying = true;
+    } catch (err) {
+      showToast('⚠️ Không thể phát nhạc, hãy thử lại');
+    }
   }
 });
 
-// ── Toast + copy ──
-const toast=document.getElementById('toast');
-function showToast(text){ toast.textContent=text; toast.style.display='block'; clearTimeout(showToast.t); showToast.t=setTimeout(()=>toast.style.display='none',1500); }
-function safeCopy(t){ if(navigator.clipboard?.writeText){navigator.clipboard.writeText(t).then(()=>showToast('Đã copy!'));} else { const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Đã copy!'); }}
-document.getElementById('copyMail')?.addEventListener('click',(e)=>{e.preventDefault(); safeCopy('leshink6@gmail.com')});
-document.getElementById('copyPhone')?.addEventListener('click',(e)=>{e.preventDefault(); safeCopy('0343063275')});
+// ========== 4. COPY & TOAST ==========
+const toastEl = document.getElementById('toast');
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.style.display = 'block';
+  clearTimeout(window.toastTimeout);
+  window.toastTimeout = setTimeout(() => toastEl.style.display = 'none', 1500);
+}
+function copyText(text, successMsg = 'Đã copy!') {
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast(successMsg));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    showToast(successMsg);
+  }
+}
+document.getElementById('copyMail')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  copyText('leshink6@gmail.com', '📧 Đã copy email');
+});
+document.getElementById('copyPhone')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  copyText('0343063275', '📞 Đã copy số điện thoại');
+});
 
-// ── Avatar click hearts ──
-const avatar=document.getElementById('avatar');
-avatar.addEventListener('click',(e)=>{for(let i=0;i<7;i++) spawnHeart(e.offsetX??48, e.offsetY??48);});
-function spawnHeart(x,y){
-  const el=document.createElement('div'); el.textContent='💖'; el.style.position='absolute'; el.style.left=x+'px'; el.style.top=y+'px'; el.style.pointerEvents='none';
-  const fs=14+Math.random()*12; el.style.fontSize=fs+'px'; el.style.opacity=1;
-  const dx=(Math.random()-.5)*60, dy=-(30+Math.random()*60); const rot=(Math.random()-.5)*60;
-  avatar.appendChild(el); const t0=performance.now();
-  function step(t){ const k=Math.min(1,(t-t0)/900); el.style.transform=`translate(${dx*k}px, ${dy*k}px) rotate(${rot*k}deg)`; el.style.opacity=(1-k).toFixed(2); if(k<1) requestAnimationFrame(step); else el.remove(); }
-  requestAnimationFrame(step);
+// ========== 5. AVATAR THẢ TIM ==========
+const avatarDiv = document.getElementById('avatar');
+avatarDiv.addEventListener('click', (e) => {
+  const rect = avatarDiv.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  for (let i = 0; i < 7; i++) spawnHeart(x, y);
+});
+function spawnHeart(x, y) {
+  const heart = document.createElement('div');
+  heart.textContent = '💖';
+  heart.style.position = 'absolute';
+  heart.style.left = x + 'px';
+  heart.style.top = y + 'px';
+  heart.style.fontSize = (14 + Math.random() * 12) + 'px';
+  heart.style.opacity = '1';
+  heart.style.pointerEvents = 'none';
+  heart.style.transition = 'none';
+  avatarDiv.appendChild(heart);
+  const dx = (Math.random() - 0.5) * 70;
+  const dy = -(30 + Math.random() * 70);
+  const rot = (Math.random() - 0.5) * 70;
+  const start = performance.now();
+  function animate(now) {
+    const t = Math.min(1, (now - start) / 900);
+    const tx = dx * t;
+    const ty = dy * t;
+    heart.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot * t}deg)`;
+    heart.style.opacity = (1 - t).toFixed(2);
+    if (t < 1) requestAnimationFrame(animate);
+    else heart.remove();
+  }
+  requestAnimationFrame(animate);
 }
 
-// ── Galaxy background ──
-const cvs=document.getElementById('galaxy'), ctx=cvs.getContext('2d');
-let W,H,stars=[],meteors=[]; function size(){W=cvs.width=innerWidth; H=cvs.height=innerHeight}
-function makeStars(n){stars=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,v:Math.random()*0.25+0.08}))}
-function draw(){ctx.clearRect(0,0,W,H);
-  const grd=ctx.createRadialGradient(W*.7,H*.3,0,W*.7,H*.3,Math.max(W,H)*.8); grd.addColorStop(0,'rgba(0,255,255,.06)'); grd.addColorStop(1,'transparent'); ctx.fillStyle=grd; ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#fff'; for(const s of stars){ s.y+=s.v; if(s.y>H){s.y=0; s.x=Math.random()*W} ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill(); }
-  ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--cyan'); ctx.lineWidth=1.6;
-  for(let i=meteors.length;i--;){ const m=meteors[i]; ctx.beginPath(); ctx.moveTo(m.x,m.y); ctx.lineTo(m.x-m.l*.6,m.y+m.l); ctx.stroke(); m.x+=m.v*.35; m.y+=m.v; if(m.y>H) meteors.splice(i,1); }
-  if(Math.random()<0.015) meteors.push({x:Math.random()*W,y:0,l:Math.random()*90+40,v:Math.random()*4+5});
-  requestAnimationFrame(draw);
-}
-addEventListener('resize',()=>{size(); makeStars(280)}); size(); makeStars(280); draw();
+// ========== 6. BACKGROUND GALAXY ==========
+const canvas = document.getElementById('galaxyCanvas');
+const ctx = canvas.getContext('2d');
+let width, height;
+let stars = [];
+let meteors = [];
 
-// ── View counter (hits.sh) ──
-// Badge ảnh tự động tăng mỗi lần có người vào — không cần JS thêm
+function resizeCanvas() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', () => {
+  resizeCanvas();
+  initStars(300);
+});
+
+function initStars(count) {
+  stars = [];
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 1.8 + 0.5,
+      v: Math.random() * 0.3 + 0.05
+    });
+  }
+}
+
+function drawGalaxy() {
+  if (!ctx) return;
+  ctx.clearRect(0, 0, width, height);
+  
+  const grad = ctx.createRadialGradient(width * 0.7, height * 0.3, 0, width * 0.7, height * 0.3, Math.max(width, height) * 0.8);
+  grad.addColorStop(0, 'rgba(0, 255, 255, 0.08)');
+  grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, width, height);
+  
+  ctx.fillStyle = '#ffffff';
+  for (let s of stars) {
+    s.y += s.v;
+    if (s.y > height) {
+      s.y = 0;
+      s.x = Math.random() * width;
+    }
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  
+  ctx.strokeStyle = '#00ffff';
+  ctx.lineWidth = 1.8;
+  for (let i = meteors.length - 1; i >= 0; i--) {
+    const m = meteors[i];
+    ctx.beginPath();
+    ctx.moveTo(m.x, m.y);
+    ctx.lineTo(m.x - m.len * 0.6, m.y + m.len);
+    ctx.stroke();
+    m.x += m.vx;
+    m.y += m.vy;
+    if (m.y > height || m.x < 0 || m.x > width) meteors.splice(i, 1);
+  }
+  
+  if (Math.random() < 0.02) {
+    meteors.push({
+      x: Math.random() * width,
+      y: Math.random() * height * 0.3,
+      len: Math.random() * 70 + 40,
+      vx: (Math.random() - 0.5) * 3,
+      vy: Math.random() * 5 + 3
+    });
+  }
+  
+  requestAnimationFrame(drawGalaxy);
+}
+
+resizeCanvas();
+initStars(300);
+drawGalaxy();
 </script>
 </body>
 </html>
