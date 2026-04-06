@@ -48,7 +48,7 @@ html,body{
 .bio{margin:12px 0 16px; color:#dfffff}
 
 .actions{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
-.btn{padding:12px 10px; border-radius:12px; border:1.6px solid var(--cyan); background:transparent; color:var(--cyan); font-weight:700; cursor:pointer; transition:.25s transform,color,box-shadow; text-align:center}
+.btn{padding:12px 10px; border-radius:12px; border:1.6px solid var(--cyan); background:transparent; color:var(--cyan); font-weight:700; cursor:pointer; transition:.25s transform,color,box-shadow; text-align:center; text-decoration:none; display:inline-block}
 .btn:hover{transform:translateY(-2px); background:radial-gradient(120% 120% at 50% 10%, rgba(0,255,255,.22), rgba(138,43,226,.22)); box-shadow:var(--glow); color:#001217}
 
 .section{margin:4px 0 12px; color:var(--cyan); font-weight:800; text-shadow:0 0 10px var(--cyan); position:relative}
@@ -62,6 +62,7 @@ html,body{
 
 .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--cyan),var(--vio)); color:#001217; padding:10px 16px; border-radius:12px; font-weight:800; display:none; z-index:9999; box-shadow:var(--glow)}
 
+/* View counter góc phải */
 .view-counter{
   position:fixed; bottom:22px; right:22px; z-index:1000;
   display:flex; align-items:center; gap:9px;
@@ -107,6 +108,7 @@ html,body{
 
 <div class="wrap">
   <div class="shell">
+    <!-- Hồ sơ -->
     <section class="panel" aria-label="Hồ sơ">
       <div class="head">
         <div class="avatar" id="avatar" title="Nhấn để thả tim">
@@ -138,6 +140,7 @@ html,body{
       </div>
     </section>
 
+    <!-- Liên kết & mạng xã hội -->
     <section class="panel" aria-label="Liên kết & mạng xã hội">
       <div class="section">Thông Tin</div>
       <div class="grid">
@@ -149,7 +152,7 @@ html,body{
       <div class="grid">
         <a class="tile" href="https://www.tiktok.com/@shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> <strong>TikTok</strong></a>
         <a class="tile" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> <strong>Facebook</strong></a>
-        <a class="tile" href="https://www.instagram.com/_tduong.3101" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
+        <a class="tile" href="https://www.instagram.com/_tduong.3101/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
         <a class="tile" href="https://locket.cam/shin3101" target="_blank" rel="noopener"><i class="fa-solid fa-camera"></i> <strong>Locket</strong></a>
         <a class="tile" href="#" id="copyMail"><i class="fa-solid fa-envelope"></i> <strong>Copy Email</strong></a>
         <a class="tile" href="#" id="copyPhone"><i class="fa-solid fa-phone"></i> <strong>Copy Phone</strong></a>
@@ -169,42 +172,30 @@ html,body{
 <audio id="bgAudio" loop preload="auto" style="display:none"></audio>
 
 <script>
-// ========== 1. TỐI ƯU LƯỢT XEM: HIỂN THỊ NGAY, CẬP NHẬT SAU ==========
-const vcSpan = document.getElementById('vcNum');
-// Hiển thị số từ localStorage ngay lập tức (nếu có) để không bị trống
-let cachedViews = localStorage.getItem('td_views_cached');
-if (cachedViews && !isNaN(parseInt(cachedViews))) {
-  vcSpan.innerText = parseInt(cachedViews).toLocaleString('vi-VN');
-} else {
-  vcSpan.innerText = '...';
-}
-
-// Gọi API countapi để tăng và lấy số mới (bất đồng bộ, không làm chậm giao diện)
-(async function updateGlobalView() {
+// ========== 1. VIEW COUNTER TOÀN CẦU (KHÔNG LOCALSTORAGE) ==========
+async function updateViewCounter() {
+  const vcSpan = document.getElementById('vcNum');
+  if (!vcSpan) return;
+  vcSpan.innerText = '0';  // hiển thị 0 ngay lập tức, không để ... lâu
   try {
     const res = await fetch('https://api.countapi.xyz/hit/tranduongdev_profile_2026/views', {
+      cache: 'no-store',
       headers: { 'Accept': 'application/json' }
     });
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (data && typeof data.value === 'number') {
-      const newCount = data.value;
-      vcSpan.innerText = newCount.toLocaleString('vi-VN');
-      localStorage.setItem('td_views_cached', newCount);
-    } else throw new Error();
+      vcSpan.innerText = data.value.toLocaleString('vi-VN');
+    } else throw new Error('Invalid response');
   } catch (err) {
-    // Fallback: tăng local count nhưng vẫn hiển thị
-    let local = localStorage.getItem('td_views_local');
-    let count = local ? parseInt(local, 10) : 0;
-    count++;
-    localStorage.setItem('td_views_local', count);
-    vcSpan.innerText = count.toLocaleString('vi-VN');
-    localStorage.setItem('td_views_cached', count);
-    document.querySelector('.view-counter').title = 'Lượt xem (local)';
+    console.error('Lỗi đếm lượt xem toàn cầu:', err);
+    vcSpan.innerText = '?';
+    document.querySelector('.view-counter').title = 'Không thể đếm lượt, hãy thử lại sau';
   }
-})();
+}
+updateViewCounter();
 
-// ========== 2. LẤY NHẠC & AVATAR TỪ ARCHIVE (KHÔNG LÀM CHẬM TRANG) ==========
+// ========== 2. LẤY NHẠC VÀ AVATAR TỪ ARCHIVE.ORG (BẤT ĐỒNG BỘ, KHÔNG ẢNH HƯỞNG TỐC ĐỘ HIỂN THỊ) ==========
 const MUSIC_ID = 'vstra-ai-ngoai-anh-official-audio-320-kbps';
 const AVATAR_ID = 'a476780b6ec4049e87c2d808650f7aea';
 
@@ -229,23 +220,29 @@ async function fetchArchiveFile(identifier, fileType = 'audio') {
 }
 
 (async function loadMedia() {
+  // Nhạc
   const audioEl = document.getElementById('bgAudio');
   const musicBtn = document.getElementById('toggleMusicBtn');
   const musicLink = await fetchArchiveFile(MUSIC_ID, 'audio');
   if (musicLink) {
     audioEl.src = musicLink;
     audioEl.load();
+    // Cho phép nút hoạt động
+    musicBtn.disabled = false;
   } else {
     musicBtn.disabled = true;
     musicBtn.textContent = '❌ Nhạc lỗi';
   }
 
+  // Avatar
   const avatarImg = document.getElementById('avatarImg');
   const imgLink = await fetchArchiveFile(AVATAR_ID, 'image');
-  if (imgLink) avatarImg.src = imgLink;
+  if (imgLink) {
+    avatarImg.src = imgLink;
+  }
 })();
 
-// ========== 3. ĐIỀU KHIỂN NHẠC ==========
+// ========== 3. ĐIỀU KHIỂN NHẠC BẬT/TẮT ==========
 const audio = document.getElementById('bgAudio');
 const musicBtn = document.getElementById('toggleMusicBtn');
 let isPlaying = false;
@@ -265,6 +262,7 @@ musicBtn.addEventListener('click', async () => {
       musicBtn.textContent = '🔊 Tắt nhạc';
       isPlaying = true;
     } catch (err) {
+      console.error(err);
       showToast('⚠️ Không thể phát nhạc, hãy thử lại');
     }
   }
@@ -335,7 +333,7 @@ function spawnHeart(x, y) {
   requestAnimationFrame(animate);
 }
 
-// ========== 6. BACKGROUND GALAXY ==========
+// ========== 6. BACKGROUND GALAXY (SAO + SAO BĂNG) ==========
 const canvas = document.getElementById('galaxyCanvas');
 const ctx = canvas.getContext('2d');
 let width, height;
