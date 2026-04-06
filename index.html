@@ -17,7 +17,7 @@
 html,body{
   height:100%; margin:0; background:var(--bg); color:var(--fg);
   font-family:system-ui,Segoe UI,Inter,Roboto,Arial,sans-serif;
-  overflow: auto; /* cho phép cuộn trang */
+  overflow: auto;
 }
 .wrap{position:relative; z-index:2; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px}
 .shell{width:100%; max-width:1100px; display:grid; grid-template-columns:1.1fr .9fr; gap:26px}
@@ -42,8 +42,8 @@ html,body{
 
 .sub{color:#bfefff; opacity:.9}
 .badges{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 6px}
-.badge{font-size:.9rem; padding:6px 10px; border-radius:10px; background:rgba(0,0,0,.25); border:1px solid rgba(0,255,255,.35); color:var(--fg)} /* Email & phone cùng màu */
-.badge a{color:inherit; text-decoration:none} /* Email không xanh */
+.badge{font-size:.9rem; padding:6px 10px; border-radius:10px; background:rgba(0,0,0,.25); border:1px solid rgba(0,255,255,.35); color:var(--fg)}
+.badge a{color:inherit; text-decoration:none}
 .bio{margin:12px 0 16px; color:#dfffff}
 
 .actions{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
@@ -61,15 +61,41 @@ html,body{
 
 .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--cyan),var(--vio)); color:#001217; padding:10px 16px; border-radius:12px; font-weight:800; display:none; z-index:5; box-shadow:var(--glow)}
 
+/* ── View counter góc dưới phải ── */
+.view-counter{
+  position:fixed; bottom:22px; right:22px; z-index:10;
+  display:flex; align-items:center; gap:9px;
+  padding:9px 16px; border-radius:14px;
+  background:rgba(2,8,20,.78); backdrop-filter:blur(14px);
+  border:1px solid rgba(0,255,255,.35);
+  box-shadow:0 0 18px rgba(0,255,255,.18), 0 0 40px rgba(138,43,226,.14);
+  font-size:.82rem; color:#bfefff;
+  transition:.3s; cursor:default; user-select:none;
+}
+.view-counter:hover{
+  box-shadow:0 0 32px rgba(0,255,255,.45), 0 0 70px rgba(138,43,226,.3);
+  border-color:var(--cyan);
+}
+.vc-dot{
+  width:7px; height:7px; border-radius:50%; flex-shrink:0;
+  background:var(--cyan); box-shadow:0 0 8px var(--cyan);
+  animation:pulse-dot 1.8s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.65)}}
+.vc-label{opacity:.75; white-space:nowrap}
+.vc-num{
+  font-weight:800; color:var(--cyan);
+  text-shadow:0 0 10px var(--cyan);
+  font-size:.95rem; min-width:38px; text-align:right;
+}
+
 #galaxy{position:fixed; top:0; left:0; width:100%; height:100%; z-index:0}
 
-/* Keyboard focus */
 :focus-visible{outline:2px dashed var(--cyan); outline-offset:4px}
-
-/* Respect reduced motion */
 @media (prefers-reduced-motion:reduce){
   .panel:hover,.avatar:hover{transform:none}
   .avatar::after{animation:none}
+  .vc-dot{animation:none}
 }
 </style>
 </head>
@@ -97,7 +123,6 @@ html,body{
           <div class="sub">Coder • Developer</div>
         </div>
       </div>
-      <!-- Badges tách riêng, email cùng màu fg -->
       <div class="badges">
         <span class="badge">📍 Phú Thọ, Việt Nam</span>
         <span class="badge">☎ 0343063275</span>
@@ -120,12 +145,12 @@ html,body{
       </div>
       <div class="section">Mạng Xã Hội</div>
       <div class="grid">
-      <a class="tile" href="https://www.tiktok.com/@shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> <strong>Tik Tok</strong></a>
-       <a class="tile" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> <strong>Facebook</strong></a>
-       <a class="tile" href="https://www.instagram.com/shintr3126/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
-       <a class="tile" href="https://zalo.me/0343063275" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> <strong>Zalo</strong></a>
-       <a class="tile" href="#" id="copyMail"><i class="fa-solid fa-envelope"></i> <strong>Copy Email</strong></a>
-       <a class="tile" href="#" id="copyPhone"><i class="fa-solid fa-phone"></i> <strong>Copy Phone</strong></a>
+        <a class="tile" href="https://www.tiktok.com/@shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> <strong>Tik Tok</strong></a>
+        <a class="tile" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> <strong>Facebook</strong></a>
+        <a class="tile" href="https://www.instagram.com/shintr3126/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
+        <a class="tile" href="https://zalo.me/0343063275" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> <strong>Zalo</strong></a>
+        <a class="tile" href="#" id="copyMail"><i class="fa-solid fa-envelope"></i> <strong>Copy Email</strong></a>
+        <a class="tile" href="#" id="copyPhone"><i class="fa-solid fa-phone"></i> <strong>Copy Phone</strong></a>
       </div>
       <div class="footer">© 2025 • Trần Dương Dev </div>
     </section>
@@ -134,25 +159,51 @@ html,body{
 
 <div class="toast" id="toast">Đã copy!</div>
 
+<!-- View counter cố định góc dưới phải -->
+<div class="view-counter" title="Tổng lượt xem profile">
+  <span class="vc-dot"></span>
+  <span class="vc-label">👁 Lượt xem</span>
+  <img
+    src="https://hits.sh/leduong1111.github.io/shin.svg?style=flat&label=&color=00ffff&labelColor=020814"
+    alt="view count"
+    style="height:22px;vertical-align:middle;filter:brightness(1.15) drop-shadow(0 0 6px #00ffff);"
+    id="vcBadge"
+  />
+</div>
+
 <audio id="backgroundAudio" loop preload="auto" style="display:none">
   <source src="https://pomf2.lain.la/f/ywjvvkdu.mp3" type="audio/mpeg" />
 </audio>
 
 <script>
-// Music toggle
+// ── Music toggle ──
 const audio=document.getElementById('backgroundAudio');
 const btn=document.getElementById('toggleMusicBtn');
-(async()=>{try{await audio.play();}catch{btn.textContent='🔈 Bật nhạc';}})();
-btn.addEventListener('click',async()=>{ if(audio.paused){await audio.play(); btn.textContent='🔊 Tắt nhạc';} else { audio.pause(); btn.textContent='🔈 Bật nhạc'; }});
+audio.pause();
+btn.textContent='🔈 Bật nhạc';
+btn.setAttribute('aria-pressed','false');
+btn.addEventListener('click',async()=>{
+  if(audio.paused){
+    try{
+      await audio.play();
+      btn.textContent='🔊 Tắt nhạc';
+      btn.setAttribute('aria-pressed','true');
+    }catch(e){ btn.textContent='❌ Lỗi audio'; }
+  } else {
+    audio.pause();
+    btn.textContent='🔈 Bật nhạc';
+    btn.setAttribute('aria-pressed','false');
+  }
+});
 
-// Toast + copy
+// ── Toast + copy ──
 const toast=document.getElementById('toast');
 function showToast(text){ toast.textContent=text; toast.style.display='block'; clearTimeout(showToast.t); showToast.t=setTimeout(()=>toast.style.display='none',1500); }
 function safeCopy(t){ if(navigator.clipboard?.writeText){navigator.clipboard.writeText(t).then(()=>showToast('Đã copy!'));} else { const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Đã copy!'); }}
 document.getElementById('copyMail')?.addEventListener('click',(e)=>{e.preventDefault(); safeCopy('leshink6@gmail.com')});
 document.getElementById('copyPhone')?.addEventListener('click',(e)=>{e.preventDefault(); safeCopy('0343063275')});
 
-// Avatar click hearts
+// ── Avatar click hearts ──
 const avatar=document.getElementById('avatar');
 avatar.addEventListener('click',(e)=>{for(let i=0;i<7;i++) spawnHeart(e.offsetX??48, e.offsetY??48);});
 function spawnHeart(x,y){
@@ -164,7 +215,7 @@ function spawnHeart(x,y){
   requestAnimationFrame(step);
 }
 
-// Galaxy background
+// ── Galaxy background ──
 const cvs=document.getElementById('galaxy'), ctx=cvs.getContext('2d');
 let W,H,stars=[],meteors=[]; function size(){W=cvs.width=innerWidth; H=cvs.height=innerHeight}
 function makeStars(n){stars=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,v:Math.random()*0.25+0.08}))}
@@ -177,6 +228,9 @@ function draw(){ctx.clearRect(0,0,W,H);
   requestAnimationFrame(draw);
 }
 addEventListener('resize',()=>{size(); makeStars(280)}); size(); makeStars(280); draw();
+
+// ── View counter (hits.sh) ──
+// Badge ảnh tự động tăng mỗi lần có người vào — không cần JS thêm
 </script>
 </body>
 </html>
