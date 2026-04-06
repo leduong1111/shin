@@ -3,381 +3,483 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Trần Dương Dev — LinkBio Neon Galaxy</title>
+<title>Trần Dương Dev — LinkBio</title>
 <meta name="theme-color" content="#000000" />
-<meta name="description" content="LinkBio neon galaxy — DarkStack Team | Trần Dương Developer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E" />
 <style>
-:root{
-  --bg:#02030A; --fg:#e6ffff; --cyan:#00ffff; --vio:#8a2be2;
-  --glow:0 0 25px rgba(0,255,255,.45),0 0 60px rgba(138,43,226,.25);
-  --card-bg:rgba(2,8,20,.48);
-}
-*{ margin:0; padding:0; box-sizing:border-box; }
-html,body{
-  height:100%; margin:0; background:var(--bg); color:var(--fg);
-  font-family:system-ui,Segoe UI,Inter,Roboto,Arial,sans-serif;
-  overflow: auto;
-}
-.wrap{position:relative; z-index:2; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px}
-.shell{width:100%; max-width:1100px; display:grid; grid-template-columns:1.1fr .9fr; gap:26px}
-@media (max-width:900px){ .shell{grid-template-columns:1fr; gap:20px} }
-
-.panel{padding:22px; border-radius:18px; background:var(--card-bg); backdrop-filter:saturate(150%) blur(12px); box-shadow:var(--glow); transition:.3s}
-.panel:hover{box-shadow:0 0 50px var(--cyan),0 0 100px var(--vio); transform:scale(1.02)}
-
-.head{display:flex; align-items:center; gap:16px}
-.avatar{position:relative; width:96px; height:96px; border-radius:50%; overflow:hidden; border:2px solid var(--cyan); box-shadow:var(--glow); cursor:pointer; transition:.3s}
-.avatar::after{content:""; position:absolute; inset:-6px; border-radius:50%;
-  background:conic-gradient(from 0deg, rgba(0,255,255,.25), rgba(138,43,226,.25), rgba(0,255,255,.25));
-  filter:blur(14px); z-index:-1; animation:halo 6s linear infinite}
-@keyframes halo{to{transform:rotate(360deg)}}
-.avatar:hover{box-shadow:0 0 60px var(--cyan),0 0 100px var(--vio); transform:scale(1.08)}
-.avatar img{width:100%; height:100%; object-fit:cover}
-.online{position:absolute; right:6px; bottom:6px; width:12px; height:12px; border-radius:50%; background:linear-gradient(135deg,var(--cyan),var(--vio)); box-shadow:0 0 10px var(--cyan)}
-
-.title h1{margin:0; font-size:1.6rem; letter-spacing:.3px; color:var(--cyan); text-shadow:0 0 14px currentColor; display:flex; align-items:center; gap:8px}
-.badge-verify{display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px}
-.badge-verify svg{display:block}
-
-.sub{color:#bfefff; opacity:.9}
-.badges{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 6px}
-.badge{font-size:.9rem; padding:6px 10px; border-radius:10px; background:rgba(0,0,0,.25); border:1px solid rgba(0,255,255,.35); color:var(--fg)}
-.badge a{color:inherit; text-decoration:none}
-.bio{margin:12px 0 16px; color:#dfffff}
-
-.actions{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
-.btn{padding:12px 10px; border-radius:12px; border:1.6px solid var(--cyan); background:transparent; color:var(--cyan); font-weight:700; cursor:pointer; transition:.25s transform,color,box-shadow; text-align:center; text-decoration:none; display:inline-block}
-.btn:hover{transform:translateY(-2px); background:radial-gradient(120% 120% at 50% 10%, rgba(0,255,255,.22), rgba(138,43,226,.22)); box-shadow:var(--glow); color:#001217}
-
-.section{margin:4px 0 12px; color:var(--cyan); font-weight:800; text-shadow:0 0 10px var(--cyan); position:relative}
-.section::after{content:""; position:absolute; left:0; bottom:-6px; width:72px; height:3px; background:linear-gradient(90deg,var(--cyan),var(--vio)); border-radius:2px}
-.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-@media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:520px){ .grid{grid-template-columns:1fr} }
-.tile{display:flex; justify-content:center; align-items:center; gap:8px; padding:14px 12px; border-radius:14px; text-decoration:none; color:var(--fg); background:rgba(0,0,0,.35); border:1px solid rgba(0,255,255,.25); transition:.25s all}
-.tile:hover{background:radial-gradient(circle at center, rgba(0,255,255,.25), rgba(138,43,226,.2)); box-shadow:var(--glow); transform:scale(1.05)}
-.footer{text-align:center; margin-top:18px; color:#bfefff}
-
-.toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--cyan),var(--vio)); color:#001217; padding:10px 16px; border-radius:12px; font-weight:800; display:none; z-index:9999; box-shadow:var(--glow)}
-
-.view-counter{
-  position:fixed; bottom:22px; right:22px; z-index:1000;
-  display:flex; align-items:center; gap:9px;
-  padding:9px 16px; border-radius:14px;
-  background:rgba(2,8,20,.78); backdrop-filter:blur(14px);
-  border:1px solid rgba(0,255,255,.35);
-  box-shadow:0 0 18px rgba(0,255,255,.18), 0 0 40px rgba(138,43,226,.14);
-  font-size:.82rem; color:#bfefff;
-  transition:.3s; cursor:default; user-select:none;
-}
-.view-counter:hover{
-  box-shadow:0 0 32px rgba(0,255,255,.45), 0 0 70px rgba(138,43,226,.3);
-  border-color:var(--cyan);
-}
-.vc-dot{
-  width:7px; height:7px; border-radius:50%; flex-shrink:0;
-  background:var(--cyan); box-shadow:0 0 8px var(--cyan);
-  animation:pulse-dot 1.8s ease-in-out infinite;
-}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.65)}}
-.vc-label{opacity:.75; white-space:nowrap}
-.vc-num{
-  font-weight:800; color:var(--cyan);
-  text-shadow:0 0 10px var(--cyan);
-  font-size:.95rem; min-width:38px; text-align:right;
-}
-
-#galaxyCanvas{
-  position:fixed; top:0; left:0; width:100%; height:100%; 
-  z-index:0; display:block;
-  background: radial-gradient(circle at 30% 20%, #03041f, #000000);
-}
+  :root {
+    --bg: #02030a;
+    --fg: #e6ffff;
+    --cyan: #00ffff;
+    --vio: #8a2be2;
+    --glow: 0 0 20px rgba(0,255,255,.4), 0 0 40px rgba(138,43,226,.2);
+    --card-bg: rgba(2,8,20,.6);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .container {
+    max-width: 1100px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    position: relative;
+    z-index: 2;
+  }
+  @media (max-width: 800px) {
+    .container { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    padding: 24px;
+    box-shadow: var(--glow);
+    transition: 0.2s;
+    border: 1px solid rgba(0,255,255,.2);
+  }
+  .card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 0 30px var(--cyan), 0 0 60px var(--vio);
+  }
+  .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid var(--cyan);
+    box-shadow: var(--glow);
+    overflow: hidden;
+    margin-right: 18px;
+    cursor: pointer;
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .flex-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    font-size: 1.7rem;
+    color: var(--cyan);
+    text-shadow: 0 0 12px currentColor;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge-verify svg { width: 22px; height: 22px; }
+  .sub { opacity: 0.8; margin-top: 4px; }
+  .info-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .info-item {
+    background: rgba(0,0,0,.4);
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(0,255,255,.3);
+  }
+  .bio { margin: 12px 0; font-style: italic; }
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0 10px;
+  }
+  .btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 40px;
+    border: 1.5px solid var(--cyan);
+    background: transparent;
+    color: var(--cyan);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn:hover {
+    background: rgba(0,255,255,.2);
+    box-shadow: var(--glow);
+    transform: translateY(-2px);
+  }
+  .section-title {
+    font-size: 1.3rem;
+    margin: 20px 0 12px;
+    color: var(--cyan);
+    border-left: 4px solid var(--cyan);
+    padding-left: 12px;
+  }
+  .grid-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .link-tile {
+    background: rgba(0,0,0,.4);
+    padding: 12px;
+    border-radius: 18px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(0,255,255,.3);
+    transition: 0.2s;
+  }
+  .link-tile:hover {
+    background: rgba(0,255,255,.2);
+    transform: scale(1.02);
+    box-shadow: var(--glow);
+  }
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--cyan), var(--vio));
+    color: #000;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-weight: bold;
+    display: none;
+    z-index: 999;
+  }
+  .view-counter {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,.7);
+    backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--cyan);
+    font-size: 0.85rem;
+    z-index: 999;
+  }
+  .vc-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{ opacity: 1; } 50%{ opacity: 0.3; } }
+  #galaxyCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  @media (max-width: 550px) {
+    .grid-links { grid-template-columns: repeat(2,1fr); }
+  }
 </style>
 </head>
 <body>
-<canvas id="galaxyCanvas" aria-hidden="true"></canvas>
+<canvas id="galaxyCanvas"></canvas>
+<div class="container">
+  <!-- Left panel -->
+  <div class="card">
+    <div class="flex-row">
+      <div class="avatar" id="avatarTrigger">
+        <!-- Ảnh từ CDN uy tín, luôn hiển thị -->
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar" id="avatarImg">
+      </div>
+      <div>
+        <h1>𝐓𝐫𝐚𝐧 𝐃𝐮𝐨𝐧𝐠 𝐃𝐞𝐯
+          <span class="badge-verify">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2l2.3 1.3 2.6-.1 1.7 2 .1 2.6L20 10l1.7 2.2-.1 2.6-1.7 2-2.6-.1L12 22l-2.3-1.3-2.6.1-1.7-2-.1-2.6L4 12l-1.7-2.2.1-2.6 1.7-2 2.6.1L12 2z" fill="url(#g)"/>
+              <path d="M10.2 13.3l-2-2 1.4-1.4 1.3 1.3 3.5-3.5 1.4 1.4-4.9 5.2z" fill="#001217"/>
+              <defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#00ffff"/><stop offset="1" stop-color="#8a2be2"/></linearGradient></defs>
+            </svg>
+          </span>
+        </h1>
+        <div class="sub">Coder • Developer</div>
+      </div>
+    </div>
+    <div class="info-list">
+      <span class="info-item">📍 Phú Thọ, Việt Nam</span>
+      <span class="info-item">☎ 0343063275</span>
+      <span class="info-item">✉ leshink6@gmail.com</span>
+    </div>
+    <div class="bio">Developer 💻 | Tool 💕</div>
+    <div class="actions">
+      <a href="https://www.facebook.com/shin.isme.06" target="_blank" class="btn">LIÊN HỆ</a>
+      <button id="musicToggleBtn" class="btn">🔈 Bật nhạc</button>
+    </div>
+  </div>
 
-<div class="wrap">
-  <div class="shell">
-    <!-- Hồ sơ -->
-    <section class="panel" aria-label="Hồ sơ">
-      <div class="head">
-        <div class="avatar" id="avatar" title="Nhấn để thả tim">
-          <img id="avatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar" style="background:#00ffff20;" />
-          <span class="online" aria-hidden="true"></span>
-        </div>
-        <div class="title">
-          <h1>𝐓𝐫𝐚𝐧 𝐃𝐮𝐨𝐧𝐠 𝐃𝐞𝐯
-            <span class="badge-verify" title="Verified">
-              <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M12 2l2.3 1.3 2.6-.1 1.7 2 .1 2.6L20 10l1.7 2.2-.1 2.6-1.7 2-2.6-.1L12 22l-2.3-1.3-2.6.1-1.7-2-.1-2.6L4 12l-1.7-2.2.1-2.6 1.7-2 2.6.1L12 2z" fill="url(#g)"/>
-                <path d="M10.2 13.3l-2-2 1.4-1.4 1.3 1.3 3.5-3.5 1.4 1.4-4.9 5.2z" fill="#001217"/>
-                <defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#00ffff"/><stop offset="1" stop-color="#8a2be2"/></linearGradient></defs>
-              </svg>
-            </span>
-          </h1>
-          <div class="sub">Coder • Developer</div>
-        </div>
-      </div>
-      <div class="badges">
-        <span class="badge">📍 Phú Thọ, Việt Nam</span>
-        <span class="badge">☎ 0343063275</span>
-        <span class="badge">✉ leshink6@gmail.com</span>
-      </div>
-      <p class="bio">Developer 💻 | Tool 💕</p>
-      <div class="actions">
-        <a class="btn" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener">LIÊN HỆ</a>
-        <button class="btn" id="toggleMusicBtn">🔈 Bật nhạc</button>
-      </div>
-    </section>
-
-    <!-- Liên kết & mạng xã hội -->
-    <section class="panel" aria-label="Liên kết & mạng xã hội">
-      <div class="section">Thông Tin</div>
-      <div class="grid">
-        <a class="tile" href="https://github.com/leduong1111" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> <strong>GitHub</strong></a>
-        <a class="tile" href="https://discordapp.com/users/982388112342810714" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> <strong>Discord</strong></a>
-        <a class="tile" href="https://zalo.me/0343063275" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> <strong>Zalo</strong></a>
-      </div>
-      <div class="section">Mạng Xã Hội</div>
-      <div class="grid">
-        <a class="tile" href="https://www.tiktok.com/@shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> <strong>TikTok</strong></a>
-        <a class="tile" href="https://www.facebook.com/shin.isme.06" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> <strong>Facebook</strong></a>
-        <a class="tile" href="https://www.instagram.com/shintr3126/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong></a>
-        <a class="tile" href="https://locket.cam/shin3101" target="_blank" rel="noopener"><i class="fa-solid fa-camera"></i> <strong>Locket</strong></a>
-        <a class="tile" href="#" id="copyMail"><i class="fa-solid fa-envelope"></i> <strong>Copy Email</strong></a>
-        <a class="tile" href="#" id="copyPhone"><i class="fa-solid fa-phone"></i> <strong>Copy Phone</strong></a>
-      </div>
-      <div class="footer">© 2025 • Trần Dương Dev</div>
-    </section>
+  <!-- Right panel -->
+  <div class="card">
+    <div class="section-title">📁 Thông Tin</div>
+    <div class="grid-links">
+      <a href="https://github.com/leduong1111" target="_blank" class="link-tile"><i class="fab fa-github"></i> GitHub</a>
+      <a href="https://discordapp.com/users/982388112342810714" target="_blank" class="link-tile"><i class="fab fa-discord"></i> Discord</a>
+      <a href="https://zalo.me/0343063275" target="_blank" class="link-tile"><i class="fas fa-comment-dots"></i> Zalo</a>
+    </div>
+    <div class="section-title">🌐 Mạng Xã Hội</div>
+    <div class="grid-links">
+      <a href="https://www.tiktok.com/@shin.isme.06" target="_blank" class="link-tile"><i class="fab fa-tiktok"></i> TikTok</a>
+      <a href="https://www.facebook.com/shin.isme.06" target="_blank" class="link-tile"><i class="fab fa-facebook"></i> Facebook</a>
+      <a href="https://www.instagram.com/shintr3126/" target="_blank" class="link-tile"><i class="fab fa-instagram"></i> Instagram</a>
+      <a href="https://locket.cam/shin3101" target="_blank" class="link-tile"><i class="fas fa-camera"></i> Locket</a>
+      <a href="#" id="copyEmailBtn" class="link-tile"><i class="fas fa-envelope"></i> Copy Email</a>
+      <a href="#" id="copyPhoneBtn" class="link-tile"><i class="fas fa-phone"></i> Copy Phone</a>
+    </div>
+    <div class="footer">© 2025 • Trần Dương Dev</div>
   </div>
 </div>
 
-<div class="toast" id="toast">Đã copy!</div>
-<div class="view-counter" title="Tổng lượt xem profile">
+<div class="view-counter">
   <span class="vc-dot"></span>
-  <span class="vc-label">👁 Lượt xem</span>
-  <span class="vc-num" id="vcNum">0</span>
+  <span>👁 Lượt xem</span>
+  <span id="viewCountDisplay">0</span>
 </div>
+<div id="toastMsg" class="toast">Đã copy</div>
 
-<audio id="bgAudio" loop preload="auto" style="display:none"></audio>
+<audio id="bgMusic" loop preload="auto" style="display:none"></audio>
 
 <script>
-// ========== 1. VIEW COUNTER TOÀN CẦU DÙNG HITS.SH (NHANH, KHÔNG LỖI) ==========
-async function updateViewCounter() {
-  const vcSpan = document.getElementById('vcNum');
-  if (!vcSpan) return;
-  vcSpan.innerText = '0';
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 4000);
-    const res = await fetch('https://hits.sh/tranduongdev-profile.json?nocache=' + Date.now(), {
-      signal: controller.signal,
-      headers: { 'Accept': 'application/json' }
-    });
-    clearTimeout(timeout);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    const total = data?.total;
-    if (typeof total === 'number') {
-      vcSpan.innerText = total.toLocaleString('vi-VN');
-    } else throw new Error();
-  } catch (err) {
-    console.warn('Hits.sh lỗi, giữ số 0');
-    vcSpan.innerText = '0';
-    // Thử lại sau 5 giây
-    setTimeout(updateViewCounter, 5000);
-  }
-}
-updateViewCounter();
-
-// ========== 2. NHẠC TỪ ARCHIVE.ORG (CÓ LOADING NHẸ) ==========
-const MUSIC_ID = 'vstra-ai-ngoai-anh-official-audio-320-kbps';
-const audio = document.getElementById('bgAudio');
-const musicBtn = document.getElementById('toggleMusicBtn');
-let isPlaying = false;
-let musicReady = false;
-
-async function loadMusic() {
-  try {
-    const res = await fetch(`https://archive.org/metadata/${MUSIC_ID}`);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    const files = data.files || [];
-    const mp3File = files.find(f => f.name.toLowerCase().endsWith('.mp3'));
-    if (mp3File) {
-      audio.src = `https://archive.org/download/${MUSIC_ID}/${mp3File.name}`;
-      audio.load();
-      musicReady = true;
-      musicBtn.disabled = false;
-    } else {
-      throw new Error('No MP3');
-    }
-  } catch (err) {
-    console.warn('Không tải được nhạc:', err);
-    musicBtn.disabled = true;
-    musicBtn.textContent = '❌ Nhạc lỗi';
-  }
-}
-loadMusic();
-
-musicBtn.addEventListener('click', async () => {
-  if (!musicReady) {
-    showToast('⏳ Nhạc chưa sẵn sàng, thử lại sau');
-    return;
-  }
-  if (isPlaying) {
-    audio.pause();
-    musicBtn.textContent = '🔈 Bật nhạc';
-    isPlaying = false;
-  } else {
+  // ---------- 1. VIEW COUNTER (toàn cầu dùng hits.sh, nếu lỗi thì dùng localStorage tạm) ----------
+  const viewSpan = document.getElementById('viewCountDisplay');
+  async function fetchViews() {
     try {
-      await audio.play();
-      musicBtn.textContent = '🔊 Tắt nhạc';
-      isPlaying = true;
-    } catch (err) {
-      showToast('⚠️ Không thể phát nhạc, hãy thử lại');
+      const res = await fetch('https://hits.sh/tranduongdev-profile.json?nocache=' + Date.now(), {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (data && typeof data.total === 'number') {
+        viewSpan.innerText = data.total.toLocaleString();
+        return true;
+      }
+      throw new Error();
+    } catch (e) {
+      console.warn('hits.sh failed, using local fallback');
+      let local = localStorage.getItem('td_views');
+      let count = local ? parseInt(local) : 0;
+      count++;
+      localStorage.setItem('td_views', count);
+      viewSpan.innerText = count;
+      return false;
     }
   }
-});
+  fetchViews();
 
-// ========== 3. COPY & TOAST ==========
-const toastEl = document.getElementById('toast');
-function showToast(msg) {
-  toastEl.textContent = msg;
-  toastEl.style.display = 'block';
-  clearTimeout(window.toastTimeout);
-  window.toastTimeout = setTimeout(() => toastEl.style.display = 'none', 1500);
-}
-function copyText(text, successMsg = 'Đã copy!') {
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).then(() => showToast(successMsg));
-  } else {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-    showToast(successMsg);
+  // ---------- 2. NHẠC (archive.org) ----------
+  const audio = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicToggleBtn');
+  let musicReady = false;
+  let isPlaying = false;
+  const MUSIC_ID = 'vstra-ai-ngoai-anh-official-audio-320-kbps';
+
+  async function loadMusic() {
+    try {
+      const metaRes = await fetch(`https://archive.org/metadata/${MUSIC_ID}`);
+      if (!metaRes.ok) throw new Error();
+      const data = await metaRes.json();
+      const mp3 = data.files?.find(f => f.name.endsWith('.mp3'));
+      if (mp3) {
+        audio.src = `https://archive.org/download/${MUSIC_ID}/${mp3.name}`;
+        audio.load();
+        musicReady = true;
+        musicBtn.disabled = false;
+        musicBtn.innerHTML = '🔈 Bật nhạc';
+      } else throw new Error();
+    } catch (err) {
+      musicBtn.disabled = true;
+      musicBtn.innerHTML = '❌ Nhạc lỗi';
+    }
   }
-}
-document.getElementById('copyMail')?.addEventListener('click', (e) => {
-  e.preventDefault();
-  copyText('leshink6@gmail.com', '📧 Đã copy email');
-});
-document.getElementById('copyPhone')?.addEventListener('click', (e) => {
-  e.preventDefault();
-  copyText('0343063275', '📞 Đã copy số điện thoại');
-});
+  loadMusic();
 
-// ========== 4. AVATAR THẢ TIM ==========
-const avatarDiv = document.getElementById('avatar');
-avatarDiv.addEventListener('click', (e) => {
-  const rect = avatarDiv.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  for (let i = 0; i < 7; i++) spawnHeart(x, y);
-});
-function spawnHeart(x, y) {
-  const heart = document.createElement('div');
-  heart.textContent = '💖';
-  heart.style.position = 'absolute';
-  heart.style.left = x + 'px';
-  heart.style.top = y + 'px';
-  heart.style.fontSize = (14 + Math.random() * 12) + 'px';
-  heart.style.opacity = '1';
-  heart.style.pointerEvents = 'none';
-  heart.style.transition = 'none';
-  avatarDiv.appendChild(heart);
-  const dx = (Math.random() - 0.5) * 70;
-  const dy = -(30 + Math.random() * 70);
-  const rot = (Math.random() - 0.5) * 70;
-  const start = performance.now();
-  function animate(now) {
-    const t = Math.min(1, (now - start) / 900);
-    const tx = dx * t;
-    const ty = dy * t;
-    heart.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot * t}deg)`;
-    heart.style.opacity = (1 - t).toFixed(2);
-    if (t < 1) requestAnimationFrame(animate);
-    else heart.remove();
+  musicBtn.addEventListener('click', async () => {
+    if (!musicReady) {
+      showToast('⏳ Nhạc chưa sẵn sàng', 1500);
+      return;
+    }
+    if (isPlaying) {
+      audio.pause();
+      musicBtn.innerHTML = '🔈 Bật nhạc';
+      isPlaying = false;
+    } else {
+      try {
+        await audio.play();
+        musicBtn.innerHTML = '🔊 Tắt nhạc';
+        isPlaying = true;
+      } catch (e) {
+        showToast('⚠️ Không thể phát nhạc', 1500);
+      }
+    }
+  });
+
+  // ---------- 3. COPY ----------
+  const toast = document.getElementById('toastMsg');
+  function showToast(msg, duration = 1500) {
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    clearTimeout(window.toastTimer);
+    window.toastTimer = setTimeout(() => toast.style.display = 'none', duration);
   }
-  requestAnimationFrame(animate);
-}
+  function copyToClipboard(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => showToast(successMsg));
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showToast(successMsg);
+    }
+  }
+  document.getElementById('copyEmailBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    copyToClipboard('leshink6@gmail.com', '📧 Đã copy email');
+  });
+  document.getElementById('copyPhoneBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    copyToClipboard('0343063275', '📞 Đã copy số');
+  });
 
-// ========== 5. BACKGROUND GALAXY (NHANH, MƯỢT) ==========
-const canvas = document.getElementById('galaxyCanvas');
-const ctx = canvas.getContext('2d');
-let width, height;
-let stars = [];
-let meteors = [];
+  // ---------- 4. AVATAR THẢ TIM ----------
+  const avatarContainer = document.getElementById('avatarTrigger');
+  avatarContainer.addEventListener('click', (e) => {
+    const rect = avatarContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    for (let i = 0; i < 6; i++) spawnHeart(x, y);
+  });
+  function spawnHeart(x, y) {
+    const heart = document.createElement('div');
+    heart.textContent = '💖';
+    heart.style.position = 'absolute';
+    heart.style.left = x + 'px';
+    heart.style.top = y + 'px';
+    heart.style.fontSize = (14 + Math.random() * 12) + 'px';
+    heart.style.pointerEvents = 'none';
+    heart.style.userSelect = 'none';
+    heart.style.zIndex = '1000';
+    avatarContainer.style.position = 'relative';
+    avatarContainer.appendChild(heart);
+    const dx = (Math.random() - 0.5) * 70;
+    const dy = -(30 + Math.random() * 80);
+    const rot = (Math.random() - 0.5) * 60;
+    const start = performance.now();
+    function animate(now) {
+      const t = Math.min(1, (now - start) / 800);
+      heart.style.transform = `translate(${dx * t}px, ${dy * t}px) rotate(${rot * t}deg)`;
+      heart.style.opacity = 1 - t;
+      if (t < 1) requestAnimationFrame(animate);
+      else heart.remove();
+    }
+    requestAnimationFrame(animate);
+  }
 
-function resizeCanvas() {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', () => {
+  // ---------- 5. BACKGROUND GALAXY (nhẹ, mượt) ----------
+  const canvas = document.getElementById('galaxyCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  let stars = [];
+  let shootingStars = [];
+
+  function resizeCanvas() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    initStars(220);
+  });
+
+  function initStars(count) {
+    stars = [];
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2 + 0.5,
+        v: Math.random() * 0.2 + 0.05
+      });
+    }
+  }
+
+  function draw() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, w, h);
+    const grad = ctx.createLinearGradient(0, 0, w, h);
+    grad.addColorStop(0, '#02030a');
+    grad.addColorStop(1, '#0a0f2a');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#fff';
+    for (let s of stars) {
+      s.y += s.v;
+      if (s.y > h) { s.y = 0; s.x = Math.random() * w; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.strokeStyle = '#0ff';
+    ctx.lineWidth = 1.2;
+    for (let i = shootingStars.length-1; i >= 0; i--) {
+      const m = shootingStars[i];
+      ctx.beginPath();
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - m.len*0.5, m.y + m.len);
+      ctx.stroke();
+      m.x += m.vx;
+      m.y += m.vy;
+      if (m.y > h || m.x < 0 || m.x > w) shootingStars.splice(i,1);
+    }
+    if (Math.random() < 0.02) {
+      shootingStars.push({
+        x: Math.random() * w,
+        y: Math.random() * h * 0.3,
+        len: Math.random() * 50 + 30,
+        vx: (Math.random() - 0.5) * 2,
+        vy: Math.random() * 4 + 3
+      });
+    }
+    requestAnimationFrame(draw);
+  }
   resizeCanvas();
-  initStars(250);
-});
-
-function initStars(count) {
-  stars = [];
-  for (let i = 0; i < count; i++) {
-    stars.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 1.5 + 0.5,
-      v: Math.random() * 0.2 + 0.05
-    });
-  }
-}
-
-function drawGalaxy() {
-  if (!ctx) return;
-  ctx.clearRect(0, 0, width, height);
-  const grad = ctx.createRadialGradient(width * 0.7, height * 0.3, 0, width * 0.7, height * 0.3, Math.max(width, height) * 0.8);
-  grad.addColorStop(0, 'rgba(0, 255, 255, 0.06)');
-  grad.addColorStop(1, 'transparent');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = '#fff';
-  for (let s of stars) {
-    s.y += s.v;
-    if (s.y > height) { s.y = 0; s.x = Math.random() * width; }
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.strokeStyle = '#00ffff';
-  ctx.lineWidth = 1.5;
-  for (let i = meteors.length - 1; i >= 0; i--) {
-    const m = meteors[i];
-    ctx.beginPath();
-    ctx.moveTo(m.x, m.y);
-    ctx.lineTo(m.x - m.len * 0.6, m.y + m.len);
-    ctx.stroke();
-    m.x += m.vx;
-    m.y += m.vy;
-    if (m.y > height || m.x < 0 || m.x > width) meteors.splice(i, 1);
-  }
-  if (Math.random() < 0.015) {
-    meteors.push({
-      x: Math.random() * width,
-      y: Math.random() * height * 0.2,
-      len: Math.random() * 60 + 30,
-      vx: (Math.random() - 0.5) * 2.5,
-      vy: Math.random() * 4 + 2
-    });
-  }
-  requestAnimationFrame(drawGalaxy);
-}
-resizeCanvas();
-initStars(250);
-drawGalaxy();
+  initStars(220);
+  draw();
 </script>
 </body>
 </html>
