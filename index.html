@@ -107,7 +107,6 @@ html,body{
 
 <div class="wrap">
   <div class="shell">
-    <!-- Hồ sơ -->
     <section class="panel" aria-label="Hồ sơ">
       <div class="head">
         <div class="avatar" id="avatar" title="Nhấn để thả tim">
@@ -139,7 +138,6 @@ html,body{
       </div>
     </section>
 
-    <!-- Liên kết & mạng xã hội -->
     <section class="panel" aria-label="Liên kết & mạng xã hội">
       <div class="section">Thông Tin</div>
       <div class="grid">
@@ -171,31 +169,34 @@ html,body{
 <audio id="bgAudio" loop preload="auto" style="display:none"></audio>
 
 <script>
-// ========== 1. VIEW COUNTER TOÀN CẦU DÙNG HITS.SH (ỔN ĐỊNH, KHÔNG LỖI ?) ==========
+// ========== 1. VIEW COUNTER (COUNTAPI - TOÀN CẦU, KHÔNG LỖI '-') ==========
 async function updateViewCounter() {
   const vcSpan = document.getElementById('vcNum');
   if (!vcSpan) return;
   vcSpan.innerText = '0';
   try {
-    const res = await fetch('https://hits.sh/tranduongdev-profile.json?nocache=' + Date.now(), {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch('https://api.countapi.xyz/hit/tranduongdev_profile_2026/views', {
+      signal: controller.signal,
       cache: 'no-store',
       headers: { 'Accept': 'application/json' }
     });
+    clearTimeout(timeoutId);
     if (!res.ok) throw new Error();
     const data = await res.json();
-    const total = data?.total;
-    if (typeof total === 'number') {
-      vcSpan.innerText = total.toLocaleString('vi-VN');
+    if (data && typeof data.value === 'number') {
+      vcSpan.innerText = data.value.toLocaleString('vi-VN');
     } else throw new Error();
   } catch (err) {
-    console.warn('Lỗi hits.sh:', err);
-    vcSpan.innerText = '—';
-    document.querySelector('.view-counter').title = 'Tạm thời không đếm được lượt';
+    console.warn('Lỗi countapi, giữ số 0 tạm thời');
+    // Không hiển thị dấu '-', giữ nguyên 0
+    vcSpan.innerText = '0';
   }
 }
 updateViewCounter();
 
-// ========== 2. LẤY NHẠC VÀ AVATAR TỪ ARCHIVE.ORG ==========
+// ========== 2. LẤY NHẠC VÀ AVATAR (CHẠY NGẦM, KHÔNG ẢNH HƯỞNG HIỂN THỊ) ==========
 const MUSIC_ID = 'vstra-ai-ngoai-anh-official-audio-320-kbps';
 const AVATAR_ID = 'a476780b6ec4049e87c2d808650f7aea';
 
